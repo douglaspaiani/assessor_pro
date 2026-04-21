@@ -48,6 +48,11 @@ import {
 import logoSite from "./images/logo.png";
 import faviconSite from "./images/favicon.png";
 import avatarUsuarioPadraoUm from "./images/usuario-default-1.png";
+import Print1 from "./images/print1.jpg";
+import Print2 from "./images/print2.jpg";
+import Print3 from "./images/print3.jpg";
+import Print4 from "./images/print4.jpg";
+import Mobile from "./images/mobile.jpg";
 
 const SearchEngineBox = ({ name, color, delay }: { name: string, color: string, delay: number }) => (
   <motion.div
@@ -219,118 +224,155 @@ const TestimonialCard = ({ name, role, text, image }: any) => (
   </motion.div>
 );
 
-const ModuleEditorPreview = () => (
-  <motion.div 
-    initial={{ opacity: 0, x: 50 }}
-    whileInView={{ opacity: 1, x: 0 }}
-    className="relative w-full max-w-[400px] h-[450px] bg-[#1a1a1a] rounded-3xl border border-white/10 p-4 shadow-2xl overflow-hidden"
-  >
-    {/* Editor Header */}
-    <div className="flex items-center justify-between mb-6 pb-4 border-b border-white/5">
-      <div className="flex gap-1.5">
-        <div className="w-2.5 h-2.5 rounded-full bg-red-500/50" />
-        <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/50" />
-        <div className="w-2.5 h-2.5 rounded-full bg-green-500/50" />
-      </div>
-      <div className="text-[10px] text-white/30 font-mono tracking-widest uppercase">Custom_Config.json</div>
-    </div>
+const ModuleEditorPreview = ({ modoEscuro }: { modoEscuro: boolean }) => {
+  const modulosPreview = [
+    { rotulo: "Módulo Financeiro", ativo: true, atraso: 0 },
+    { rotulo: "Relatórios Custom", ativo: true, atraso: 0.1 },
+    { rotulo: "Ticket de Suporte", ativo: false, atraso: 0.2 },
+    { rotulo: "Agenda Integrada", ativo: true, atraso: 0.3 }
+  ];
 
-    {/* Draggable/Animated Modules */}
-    <div className="space-y-3">
-      {[ 
-        { label: "Módulo Financeiro", active: true, delay: 0 },
-        { label: "Relatórios Custom", active: true, delay: 0.1 },
-        { label: "Ticket de Suporte", active: false, delay: 0.2 },
-        { label: "Agenda Integrada", active: true, delay: 0.3 }
-      ].map((mod, i) => (
+  const classeContainer = modoEscuro
+    ? "relative w-full max-w-[400px] h-[450px] bg-[#1a1a1a] rounded-3xl border border-white/10 p-4 shadow-2xl overflow-hidden"
+    : "relative w-full max-w-[400px] h-[450px] bg-gradient-to-b from-[#ffffff] to-[#f6f0f4] rounded-3xl border border-[#e8dde4] p-4 shadow-[0_20px_55px_rgba(20,12,18,0.18)] overflow-hidden";
+
+  const classeCabecalho = modoEscuro
+    ? "flex items-center justify-between mb-6 pb-4 border-b border-white/5"
+    : "flex items-center justify-between mb-6 pb-4 border-b border-[#e3d6de]";
+
+  const classeTituloArquivo = modoEscuro
+    ? "text-[10px] text-white/30 font-mono tracking-widest uppercase"
+    : "text-[10px] text-[#8a7e86] font-mono tracking-widest uppercase";
+
+  const classeModulo = modoEscuro
+    ? "bg-white/5 border border-white/10 p-4 rounded-xl flex items-center justify-between group cursor-pointer hover:bg-white/10 transition-colors"
+    : "bg-[#f9f4f7] border border-[#e5d8e0] p-4 rounded-xl flex items-center justify-between group cursor-pointer hover:bg-white transition-colors";
+
+  const classeTextoModulo = modoEscuro
+    ? "text-sm font-medium text-white/80"
+    : "text-sm font-semibold text-[#2f2930]";
+
+  const classeRodapeCodigo = modoEscuro
+    ? "mt-8 pt-6 border-t border-white/5 space-y-2"
+    : "mt-8 pt-6 border-t border-[#e3d7df] space-y-2";
+
+  const classeLinhaCodigo = modoEscuro ? "bg-white/5" : "bg-[#eadfe5]";
+
+  return (
+    <motion.div 
+      initial={{ opacity: 0, x: 50 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      className={classeContainer}
+    >
+      {/* Editor Header */}
+      <div className={classeCabecalho}>
+        <div className="flex gap-1.5">
+          <div className={`w-2.5 h-2.5 rounded-full ${modoEscuro ? "bg-red-500/50" : "bg-red-500/80"}`} />
+          <div className={`w-2.5 h-2.5 rounded-full ${modoEscuro ? "bg-yellow-500/50" : "bg-yellow-500/80"}`} />
+          <div className={`w-2.5 h-2.5 rounded-full ${modoEscuro ? "bg-green-500/50" : "bg-green-500/80"}`} />
+        </div>
+        <div className={classeTituloArquivo}>Custom_Config.json</div>
+      </div>
+
+      {/* Draggable/Animated Modules */}
+      <div className="space-y-3">
+        {modulosPreview.map((modulo, indice) => (
+          <motion.div
+            key={indice}
+            initial={{ x: -20, opacity: 0 }}
+            whileInView={{ x: 0, opacity: 1 }}
+            transition={{ delay: modulo.atraso + 0.5 }}
+            className={classeModulo}
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-2 h-2 rounded-full bg-pink-accent" />
+              <span className={classeTextoModulo}>{modulo.rotulo}</span>
+            </div>
+            <div className={`w-10 h-5 rounded-full relative transition-colors ${modulo.ativo ? "bg-pink-accent" : modoEscuro ? "bg-white/10" : "bg-[#cbc0c7]"}`}>
+              <motion.div 
+                animate={{ x: modulo.ativo ? 20 : 0 }}
+                className={`absolute top-1 left-1 w-3 h-3 rounded-full shadow-sm ${modoEscuro ? "bg-white" : "bg-white border border-[#e3d6de]"}`}
+              />
+            </div>
+          </motion.div>
+        ))}
+
+        {/* Floating Animated "Adding" Cursor */}
         <motion.div
-          key={i}
-          initial={{ x: -20, opacity: 0 }}
-          whileInView={{ x: 0, opacity: 1 }}
-          transition={{ delay: mod.delay + 0.5 }}
-          className="bg-white/5 border border-white/10 p-4 rounded-xl flex items-center justify-between group cursor-pointer hover:bg-white/10 transition-colors"
+          animate={{ 
+            y: [0, 150, 0],
+            x: [0, -20, 0],
+            opacity: [0, 1, 0]
+          }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-1/2 right-1/4 w-8 h-8 pointer-events-none"
         >
-          <div className="flex items-center gap-3">
-            <div className="w-2 h-2 rounded-full bg-pink-accent" />
-            <span className="text-sm font-medium text-white/80">{mod.label}</span>
-          </div>
-          <div className={`w-10 h-5 rounded-full relative transition-colors ${mod.active ? 'bg-pink-accent' : 'bg-white/10'}`}>
-            <motion.div 
-              animate={{ x: mod.active ? 20 : 0 }}
-              className="absolute top-1 left-1 w-3 h-3 bg-white rounded-full shadow-sm"
-            />
+          <div className={`w-full h-full rounded-full flex items-center justify-center animate-ping ${modoEscuro ? "bg-pink-accent/20" : "bg-pink-accent/25"}`}>
+            <ChevronRight className="w-4 h-4 text-pink-accent" />
           </div>
         </motion.div>
-      ))}
 
-      {/* Floating Animated "Adding" Cursor */}
-      <motion.div
-        animate={{ 
-          y: [0, 150, 0],
-          x: [0, -20, 0],
-          opacity: [0, 1, 0]
-        }}
-        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-1/2 right-1/4 w-8 h-8 pointer-events-none"
-      >
-        <div className="w-full h-full bg-pink-accent/20 rounded-full flex items-center justify-center animate-ping">
-          <ChevronRight className="w-4 h-4 text-pink-accent" />
+        {/* Code Snippet Below */}
+        <div className={classeRodapeCodigo}>
+          <motion.div 
+            animate={{ opacity: [0.3, 1, 0.3] }}
+            transition={{ duration: 2, repeat: Infinity }}
+            className={`h-2 w-full rounded ${classeLinhaCodigo}`} 
+          />
+          <motion.div 
+            animate={{ opacity: [0.1, 0.5, 0.1] }}
+            transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
+            className={`h-2 w-3/4 rounded ${classeLinhaCodigo}`} 
+          />
+          <motion.div 
+            animate={{ opacity: [0.2, 0.8, 0.2] }}
+            transition={{ duration: 2, repeat: Infinity, delay: 1 }}
+            className={`h-2 w-1/2 rounded ${classeLinhaCodigo}`} 
+          />
         </div>
-      </motion.div>
-
-      {/* Code Snippet Below */}
-      <div className="mt-8 pt-6 border-t border-white/5 space-y-2">
-        <motion.div 
-          animate={{ opacity: [0.3, 1, 0.3] }}
-          transition={{ duration: 2, repeat: Infinity }}
-          className="h-2 w-full bg-white/5 rounded" 
-        />
-        <motion.div 
-          animate={{ opacity: [0.1, 0.5, 0.1] }}
-          transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
-          className="h-2 w-3/4 bg-white/5 rounded" 
-        />
-        <motion.div 
-          animate={{ opacity: [0.2, 0.8, 0.2] }}
-          transition={{ duration: 2, repeat: Infinity, delay: 1 }}
-          className="h-2 w-1/2 bg-white/5 rounded" 
-        />
       </div>
-    </div>
-  </motion.div>
-);
+    </motion.div>
+  );
+};
 
 const screenData = [
   {
     title: "Dashboard Intuitivo",
     description: "Uma visão completa do seu negócio em tempo real. Acompanhe metas, novos processos e pendências de forma centralizada.",
-    image: "https://picsum.photos/seed/dashboard-dark/1280/800",
+    image: Print1,
     module: "Dashboard"
   },
   {
     title: "Gestão de Processos",
     description: "Organize cada etapa do salário maternidade. Status automatizados e alertas de prazos para nunca perder uma movimentação.",
-    image: "https://picsum.photos/seed/process-dark/1280/800",
+    image: Print2,
     module: "Processos"
   },
   {
     title: "Agenda Inteligente",
     description: "Sincronize atendimentos e perícias. Notificações automáticas para sua equipe e para as mamães clientes.",
-    image: "https://picsum.photos/seed/calendar-dark/1280/800",
+    image: Print3,
     module: "Agenda"
   },
   {
     title: "Painel da Mamãe",
     description: "Área exclusiva para a cliente acompanhar o status do seu pedido e enviar documentos de forma segura.",
-    image: "https://picsum.photos/seed/mother-dark/1280/800",
+    image: Print4,
     module: "Painel da Mamãe"
   }
+];
+
+const beneficiosLandingPageInclusa = [
+  "Landing page pronta para divulgar sua assessoria e captar leads diariamente.",
+  "Formulário com CTA estratégico para levar a cliente direto para o seu WhatsApp.",
+  "Layout otimizado para celular, com foco em conversão e credibilidade.",
+  "Estrutura preparada para SEO, acelerando sua presença no Google."
 ];
 
 const tituloSeo = "Assessor Pro | Sistema para Gestão de Salário Maternidade";
 const descricaoSeo = "Otimize sua assessoria com agenda inteligente, gestão de processos, relatórios e automações para salário maternidade.";
 const palavrasChaveSeo = "assessoria, salário maternidade, software jurídico, gestão de processos, sistema para assessoria";
-const urlCanonicaSeo = "https://assessor.pro/";
+const urlCanonicaSeo = "https://ogivadigital.com/assessor-pro";
 const mensagemWhatsappPredefinida = "Olá tudo bem? Tenho interesse no sistema Assessor Pro para minha acessoria maternidade.";
 const linkWhatsappEspecialista = `https://wa.me/5551994727036?text=${encodeURIComponent(mensagemWhatsappPredefinida)}`;
 
@@ -340,6 +382,13 @@ export default function App() {
   const [isDarkMode, setIsDarkMode] = useState(true);
   const urlBaseSeo = typeof window !== "undefined" ? window.location.origin : urlCanonicaSeo;
   const imagemCompartilhamentoSeo = `${urlBaseSeo}${logoSite}`;
+  const irParaTopoSite = () => {
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      setIsMenuOpen(false);
+    }
+  };
+
   const abrirWhatsappEspecialista = () => {
     if (typeof window !== "undefined") {
       window.open(linkWhatsappEspecialista, "_blank", "noopener,noreferrer");
@@ -389,7 +438,12 @@ export default function App() {
       {/* Navigation */}
       <nav className="fixed top-0 w-full z-50 bg-bg-primary/50 backdrop-blur-xl border-b border-border-subtle">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <div className="flex items-center">
+          <button
+            type="button"
+            onClick={irParaTopoSite}
+            aria-label="Voltar ao topo do site"
+            className="flex items-center rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-accent/60"
+          >
             <motion.img
               src={logoSite}
               alt="Logo Assessor Pro"
@@ -397,7 +451,7 @@ export default function App() {
               whileTap={{ scale: 0.98 }}
               className="h-12 w-auto object-contain"
             />
-          </div>
+          </button>
           
           <ul className="hidden lg:flex items-center gap-10">
             {["Módulos", "Faturamento", "Investimento", "Depoimentos", "FAQ"].map((item) => (
@@ -802,6 +856,89 @@ export default function App() {
         </div>
       </section>
 
+      {/* Landing Page Inclusa Section */}
+      <section id="landing-page" className="py-24 px-6 relative overflow-hidden">
+        <div className="max-w-7xl mx-auto">
+          <div className="relative bg-card-surface border border-border-subtle rounded-[3rem] p-8 md:p-14 overflow-hidden">
+            <div className="absolute inset-y-0 right-0 w-1/3 bg-pink-accent/10 blur-[90px] pointer-events-none" />
+            <div className="grid lg:grid-cols-2 gap-14 items-center relative z-10">
+              <motion.div
+                initial={{ opacity: 0, x: -30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+              >
+                <div className="w-12 h-12 bg-pink-accent/10 rounded-xl flex items-center justify-center mb-6">
+                  <Globe className="text-pink-accent w-6 h-6" />
+                </div>
+                <span className="inline-block mb-4 px-4 py-1.5 bg-pink-accent/10 border border-pink-accent/20 rounded-full text-[10px] uppercase tracking-widest font-black text-pink-accent">
+                  Incluso no Sistema
+                </span>
+                <h2 className="text-4xl md:text-5xl font-serif mb-8 leading-tight">
+                  Seu plano já inclui uma <span className="italic text-pink-soft">Landing Page</span> para captar novas clientes.
+                </h2>
+                <p className="text-lg text-text-secondary leading-relaxed mb-8">
+                  Além da plataforma de gestão, sua empresa recebe uma página profissional de vendas para atrair mamães interessadas, gerar oportunidades e manter sua agenda sempre em movimento.
+                </p>
+                <div className="space-y-4 mb-10">
+                  {beneficiosLandingPageInclusa.map((beneficio, indice) => (
+                    <div key={indice} className="flex items-start gap-3 text-text-primary">
+                      <CheckCircle2 className="w-5 h-5 text-pink-accent flex-shrink-0 mt-0.5" />
+                      <span className="font-medium">{beneficio}</span>
+                    </div>
+                  ))}
+                </div>
+                <motion.button
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  onClick={abrirWhatsappEspecialista}
+                  className="bg-pink-accent text-white px-8 py-4 rounded-full font-bold text-sm hover:brightness-110 transition-all shadow-xl shadow-pink-accent/20 flex items-center justify-center gap-2"
+                >
+                  Quero ativar minha landing page <ChevronRight className="w-5 h-5" />
+                </motion.button>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, x: 30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                className="bg-bg-primary/70 border border-border-subtle rounded-3xl p-6 md:p-8 backdrop-blur-md shadow-2xl"
+              >
+                <div className="flex items-center justify-between pb-5 mb-6 border-b border-border-subtle">
+                  <div>
+                    <div className="text-[10px] uppercase tracking-widest text-text-secondary font-black">Landing Pronta</div>
+                    <h3 className="text-2xl font-serif">Página de Captação</h3>
+                  </div>
+                  <div className="px-3 py-1 bg-green-500/10 text-green-500 rounded-full text-[10px] font-black uppercase tracking-wider">
+                    Ativa
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <div className="p-4 rounded-2xl border border-border-subtle bg-card-surface/70">
+                    <div className="text-[10px] uppercase tracking-widest text-text-secondary font-black mb-1">Headline</div>
+                    <p className="font-bold">Atendimento especializado em salário maternidade sem burocracia.</p>
+                  </div>
+                  <div className="p-4 rounded-2xl border border-border-subtle bg-card-surface/70">
+                    <div className="text-[10px] uppercase tracking-widest text-text-secondary font-black mb-1">CTA principal</div>
+                    <p className="font-bold">Quero falar com uma especialista agora.</p>
+                  </div>
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    <div className="p-4 rounded-2xl border border-border-subtle bg-card-surface/70">
+                      <div className="text-[10px] uppercase tracking-widest text-text-secondary font-black mb-1">Leads</div>
+                      <p className="text-2xl font-black text-pink-accent">+48/semana</p>
+                    </div>
+                    <div className="p-4 rounded-2xl border border-border-subtle bg-card-surface/70">
+                      <div className="text-[10px] uppercase tracking-widest text-text-secondary font-black mb-1">Conversão</div>
+                      <p className="text-2xl font-black text-pink-accent">12,4%</p>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* SEO Section */}
       <section className="py-24 px-6 relative overflow-hidden">
         <div className="max-w-7xl mx-auto">
@@ -958,15 +1095,11 @@ export default function App() {
                  <div className="w-full h-full bg-bg-primary rounded-[2rem] overflow-hidden relative">
                     <div className="h-6 w-1/3 bg-[#1a1a1a] absolute top-0 left-1/2 -translate-x-1/2 rounded-b-xl z-20" />
                     <img 
-                      src="https://picsum.photos/seed/mobile-mom/400/800" 
+                      src={Mobile}
                       alt="Mobile App" 
                       className="w-full h-full object-cover"
                       referrerPolicy="no-referrer"
                     />
-                    <div className="absolute bottom-4 left-4 right-4 p-4 bg-white/20 backdrop-blur-md rounded-2xl border border-white/30">
-                       <p className="text-[10px] font-bold text-white uppercase italic">Status do seu Processo</p>
-                       <p className="text-sm font-black text-white">Documentação Aprovada! ✨</p>
-                    </div>
                  </div>
                </motion.div>
                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140%] h-[140%] bg-pink-accent/10 rounded-full blur-[100px] -z-10" />
@@ -1027,7 +1160,7 @@ export default function App() {
                 </div>
               </div>
               <div className="hidden lg:flex justify-end">
-                <ModuleEditorPreview />
+                <ModuleEditorPreview modoEscuro={isDarkMode} />
               </div>
             </div>
           </div>
@@ -1097,6 +1230,7 @@ export default function App() {
                     { label: "Clientes ilimitados", icon: Users },
                     { label: "Funcionários ilimitados", icon: Users },
                     { label: "Acessos ilimitados ao site", icon: Globe },
+                    { label: "Site / Landing page com SEO otimizado incluso", icon: Search },
                     { label: "Armazenamento seguro ilimitado", icon: ShieldCheck }
                   ].map((item, i) => (
                     <div key={i} className="flex items-center gap-4">
